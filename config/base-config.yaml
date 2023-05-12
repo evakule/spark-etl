@@ -1,0 +1,3 @@
+name: "stocks-extractor"
+format: "json"
+data-path: "data/fundamental.json"

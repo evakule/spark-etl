@@ -1,19 +1,23 @@
 package app;
 
+import extractor.Extractor;
+import extractor.StocksExtractor;
 import functions.RowPrinter;
-import mappers.BalanceSheetMapper;
-import mappers.StockStructureMapper;
-import model.QuarterStock;
+import model.BalanceSheetEntity;
 import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
+import processor.BalanceSheetProcessor;
+import util.ConfigProvider;
 
 
 import java.io.Serializable;
+import java.util.Properties;
 
 
 public class StocksApplication implements Serializable {
+
+  private final Properties props = new ConfigProvider("config/base-config.yaml").getProperties();
+
   public static void main(String[] args) {
 
     StocksApplication app = new StocksApplication();
@@ -21,25 +25,13 @@ public class StocksApplication implements Serializable {
   }
 
   private void start() {
-    SparkSession spark = SparkSession.builder()
-        .appName("Stocks Analyzer")
-        .master("local[*]")
-        .getOrCreate();
+    Extractor<Dataset<Row>> extractor = new StocksExtractor(props);
 
-    Dataset<Row> stocks = spark
-        .read()
-        .option("multiline", "true")
-        .format("json")
-        .load("data/fundamental.json");
+    Dataset<BalanceSheetEntity> balanceSheet = new BalanceSheetProcessor().transform(extractor.getSourceData());
 
-    Dataset<Row> financials = stocks.selectExpr("Financials.Balance_Sheet.yearly.*");
+    balanceSheet.foreach(new RowPrinter<>());
 
-    Dataset<Row> result = financials.flatMap(new StockStructureMapper(), Encoders.bean(Row.class));
-    Dataset<QuarterStock> stocks2 = result.map(new BalanceSheetMapper(), Encoders.bean(QuarterStock.class));
-
-    stocks2.foreach(new RowPrinter());
-
-    stocks2.printSchema();
-    stocks2.show();
+    balanceSheet.printSchema();
+    balanceSheet.show();
   }
 }
