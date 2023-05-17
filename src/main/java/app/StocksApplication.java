@@ -3,10 +3,15 @@ package app;
 import extractor.Extractor;
 import extractor.StocksExtractor;
 import functions.RowPrinter;
+import job.Job;
+import job.SimpleLocalJob;
+import loader.BalanceSheetLoader;
+import loader.Loader;
 import model.BalanceSheetEntity;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import processor.BalanceSheetProcessor;
+import processor.Processor;
 import util.ConfigProvider;
 
 
@@ -26,12 +31,15 @@ public class StocksApplication implements Serializable {
 
   private void start() {
     Extractor<Dataset<Row>> extractor = new StocksExtractor(props);
+    Processor<Dataset<Row>, Dataset<BalanceSheetEntity>> processor = new BalanceSheetProcessor();
+    Loader<Dataset<BalanceSheetEntity>> loader = new BalanceSheetLoader("output/balance-sheet");
 
-    Dataset<BalanceSheetEntity> balanceSheet = new BalanceSheetProcessor().transform(extractor.getSourceData());
+    Job job = new SimpleLocalJob<>(extractor, processor, loader);
+    job.launch();
+  }
 
-    balanceSheet.foreach(new RowPrinter<>());
-
-    balanceSheet.printSchema();
-    balanceSheet.show();
+  private void printer(Dataset<?> dataset) {
+    dataset.printSchema();
+    dataset.foreach(new RowPrinter<>());
   }
 }

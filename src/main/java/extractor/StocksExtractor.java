@@ -27,10 +27,11 @@ public class StocksExtractor implements Extractor<Dataset<Row>> {
 
   public Dataset<Row> getSourceData() {
     if (sourceData == null) {
-      this.sourceData = this.spark.read()
+      this.sourceData = spark.read()
           .option("multiline", "true")
           .format(props.getProperty("format"))
           .load(props.getProperty("data-path"));
+      spark.conf().set("mapreduce.fileoutputcommitter.marksuccessfuljobs", false);
     }
     return sourceData;
   }

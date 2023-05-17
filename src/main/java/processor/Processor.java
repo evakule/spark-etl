@@ -1,7 +1,7 @@
 package processor;
 
-public interface Processor<K, V> {
+public interface Processor<Input, Output> {
 
-  K transform(V input);
+  Output transform(Input input);
 
 }

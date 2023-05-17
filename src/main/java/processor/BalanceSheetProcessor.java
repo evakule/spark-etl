@@ -8,7 +8,7 @@ import org.apache.spark.sql.Row;
 import util.CategoryUtils;
 import util.DataCategory;
 
-public class BalanceSheetProcessor implements Processor<Dataset<BalanceSheetEntity>, Dataset<Row>> {
+public class BalanceSheetProcessor implements Processor<Dataset<Row>, Dataset<BalanceSheetEntity>> {
 
   @Override
   public Dataset<BalanceSheetEntity> transform(Dataset<Row> input) {

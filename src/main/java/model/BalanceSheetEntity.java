@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @Builder
-public class BalanceSheetEntity implements Serializable, FundamentalEntity {
+public class BalanceSheetEntity implements FundamentalEntity, Serializable {
 
   private String date;
   private String filingDate;
