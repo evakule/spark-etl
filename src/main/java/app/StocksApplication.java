@@ -32,7 +32,7 @@ public class StocksApplication implements Serializable {
   private void start() {
     Extractor<Dataset<Row>> extractor = new StocksExtractor(props);
     Processor<Dataset<Row>, Dataset<BalanceSheetEntity>> processor = new BalanceSheetProcessor();
-    Loader<Dataset<BalanceSheetEntity>> loader = new BalanceSheetLoader("output/balance-sheet");
+    Loader<Dataset<BalanceSheetEntity>> loader = new BalanceSheetLoader();
 
     Job job = new SimpleLocalJob<>(extractor, processor, loader);
     job.launch();

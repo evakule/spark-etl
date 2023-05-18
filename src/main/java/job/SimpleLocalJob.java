@@ -23,6 +23,6 @@ public class SimpleLocalJob<K, V> implements Job {
   public void launch() {
     K rawData = this.extractor.getSourceData();
     V processedData = processor.transform(rawData);
-    loader.loadLocallyToCsv(processedData);
+    loader.load(processedData);
   }
 }

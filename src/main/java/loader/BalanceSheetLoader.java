@@ -5,14 +5,13 @@ import org.apache.spark.sql.Dataset;
 
 public class BalanceSheetLoader implements Loader<Dataset<BalanceSheetEntity>> {
 
-  private final String path;
+  private final static String PATH = "output/balance-sheet";
 
-  public BalanceSheetLoader(String path) {
-    this.path = path;
+  public BalanceSheetLoader() {
   }
 
   @Override
-  public void loadLocallyToCsv(Dataset<BalanceSheetEntity> data) {
-    data.coalesce(1).write().csv(path);
+  public void load(Dataset<BalanceSheetEntity> data) {
+    data.coalesce(1).write().csv(PATH);
   }
 }
