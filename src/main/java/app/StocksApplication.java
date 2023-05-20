@@ -1,17 +1,10 @@
 package app;
 
-import extractor.Extractor;
-import extractor.StocksExtractor;
 import functions.RowPrinter;
 import job.Job;
-import job.SimpleLocalJob;
-import loader.BalanceSheetLoader;
-import loader.Loader;
-import model.BalanceSheetEntity;
+import job.factory.JobFactory;
 import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import processor.BalanceSheetProcessor;
-import processor.Processor;
+import org.apache.spark.sql.SparkSession;
 import util.ConfigProvider;
 
 
@@ -30,12 +23,16 @@ public class StocksApplication implements Serializable {
   }
 
   private void start() {
-    Extractor<Dataset<Row>> extractor = new StocksExtractor(props);
-    Processor<Dataset<Row>, Dataset<BalanceSheetEntity>> processor = new BalanceSheetProcessor();
-    Loader<Dataset<BalanceSheetEntity>> loader = new BalanceSheetLoader();
 
-    Job job = new SimpleLocalJob<>(extractor, processor, loader);
-    job.launch();
+    SparkSession spark = SparkSession.builder()
+        .appName(props.getProperty("name"))
+        .master("local[*]")
+        .getOrCreate();
+
+    JobFactory jobFactory = new JobFactory(props, spark);
+
+    jobFactory.getJobs().stream().parallel().forEach(Job::launch);
+
   }
 
   private void printer(Dataset<?> dataset) {

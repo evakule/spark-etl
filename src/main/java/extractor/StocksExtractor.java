@@ -12,14 +12,6 @@ public class StocksExtractor implements Extractor<Dataset<Row>> {
   private final SparkSession spark;
   private Dataset<Row> sourceData = null;
 
-  public StocksExtractor(Properties props) {
-    this.props = props;
-    this.spark = SparkSession.builder()
-        .appName(props.getProperty("name"))
-        .master("local[*]")
-        .getOrCreate();
-  }
-
   public StocksExtractor(Properties props, SparkSession spark) {
     this.props = props;
     this.spark = spark;
