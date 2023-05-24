@@ -1,4 +1,4 @@
-package job.factory;
+package job;
 
 import extractor.StocksExtractor;
 import job.Job;

@@ -1,7 +1,7 @@
-package processor.category;
+package processor;
 
 public enum DataCategory {
-  BALANCE_SHEET("Financials.Balance_Sheet.quarterly.*");
+  BALANCE_SHEET_Q("Financials.Balance_Sheet.quarterly.*");
 
   private final String category;
 

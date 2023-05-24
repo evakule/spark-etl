@@ -1,6 +1,6 @@
 package util;
 
-import functions.StockStructureMapper;
+import processor.functions.StockStructureMapper;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;

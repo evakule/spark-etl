@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
 
-public class ConfigProvider {
+public class YamlConfigProvider {
 
   private final Properties properties = new Properties();
 
-  public ConfigProvider(String configFilePath) {
+  public YamlConfigProvider(String configFilePath) {
 
     try (FileInputStream inputStream = new FileInputStream(configFilePath)) {
 

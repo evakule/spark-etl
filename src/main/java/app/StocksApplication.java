@@ -1,11 +1,11 @@
 package app;
 
-import functions.RowPrinter;
+import processor.functions.RowPrinter;
 import job.Job;
-import job.factory.JobFactory;
+import job.JobFactory;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.SparkSession;
-import util.ConfigProvider;
+import util.YamlConfigProvider;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -15,8 +15,8 @@ import java.util.Properties;
 
 public class StocksApplication implements Serializable {
 
-  private final Properties baseConfig = new ConfigProvider("config/base-config.yaml").getProperties();
-  private final Properties postgresConfig = new ConfigProvider("config/postgre-sql-config.yaml").getProperties();
+  private final Properties baseConfig = new YamlConfigProvider("config/base-config.yaml").getProperties();
+  private final Properties postgresConfig = new YamlConfigProvider("config/postgre-sql-config.yaml").getProperties();
 
   public static void main(String[] args) {
     StocksApplication app = new StocksApplication();
