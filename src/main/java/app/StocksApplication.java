@@ -25,17 +25,17 @@ public class StocksApplication implements Serializable {
 
   private void start() {
 
-    Map<String, Properties> propsMap = new HashMap<>();
+    Map<String, Properties> configs = new HashMap<>();
 
-    propsMap.put("base", baseConfig);
-    propsMap.put("postgres", postgresConfig);
+    configs.put("base", baseConfig);
+    configs.put("postgres", postgresConfig);
 
     SparkSession spark = SparkSession.builder()
-        .appName(propsMap.get("base").getProperty("name"))
+        .appName(configs.get("base").getProperty("name"))
         .master("local[*]")
         .getOrCreate();
 
-    JobFactory jobFactory = new JobFactory(propsMap, spark);
+    JobFactory jobFactory = new JobFactory(configs, spark);
 
     jobFactory.getJobs().stream().parallel().forEach(Job::launch);
 
