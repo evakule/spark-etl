@@ -7,29 +7,35 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.SparkSession;
 import util.ConfigProvider;
 
-
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 
 public class StocksApplication implements Serializable {
 
-  private final Properties props = new ConfigProvider("config/base-config.yaml").getProperties();
+  private final Properties baseConfig = new ConfigProvider("config/base-config.yaml").getProperties();
+  private final Properties postgresConfig = new ConfigProvider("config/postgre-sql-config.yaml").getProperties();
 
   public static void main(String[] args) {
-
     StocksApplication app = new StocksApplication();
     app.start();
   }
 
   private void start() {
 
+    Map<String, Properties> propsMap = new HashMap<>();
+
+    propsMap.put("base", baseConfig);
+    propsMap.put("postgres", postgresConfig);
+
     SparkSession spark = SparkSession.builder()
-        .appName(props.getProperty("name"))
+        .appName(propsMap.get("base").getProperty("name"))
         .master("local[*]")
         .getOrCreate();
 
-    JobFactory jobFactory = new JobFactory(props, spark);
+    JobFactory jobFactory = new JobFactory(propsMap, spark);
 
     jobFactory.getJobs().stream().parallel().forEach(Job::launch);
 

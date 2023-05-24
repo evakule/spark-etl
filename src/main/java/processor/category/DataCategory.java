@@ -1,4 +1,4 @@
-package util;
+package processor.category;
 
 public enum DataCategory {
   BALANCE_SHEET("Financials.Balance_Sheet.quarterly.*");

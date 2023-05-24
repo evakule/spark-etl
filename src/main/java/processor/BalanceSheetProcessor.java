@@ -5,8 +5,8 @@ import model.BalanceSheetEntity;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
+import processor.category.DataCategory;
 import util.CategoryUtils;
-import util.DataCategory;
 
 public class BalanceSheetProcessor implements Processor<Dataset<Row>, Dataset<BalanceSheetEntity>> {
 
