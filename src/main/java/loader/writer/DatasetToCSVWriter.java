@@ -14,6 +14,6 @@ public class DatasetToCSVWriter<T> implements Writer {
 
   @Override
   public void write() {
-    data.coalesce(1).write().csv(path);
+    data.coalesce(1).write().option("header", "true").csv(path);
   }
 }
